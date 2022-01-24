@@ -1,7 +1,6 @@
 # OIS
 
-![logo](https://user-images.githubusercontent.com/43711362/150809050-c08337d2-c6bb-458b-9346-fc4eac9db3fd.png)
+<img width="758" alt="miur oii" src="https://user-images.githubusercontent.com/43711362/150813016-e6e249bb-d369-4cd9-bd08-8b7f1842db5c.png">
 
-![miur](https://user-images.githubusercontent.com/43711362/150809074-d50dc0f6-90a6-43c2-9de4-58dbd9312c07.jpg)
 
 Repository contente alcune soluzioni (diversamente ottime) ai problemi di informatica disponibili su training.olinfo.it
