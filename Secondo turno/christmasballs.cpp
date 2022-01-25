@@ -1,56 +1,66 @@
 #include <bits/stdc++.h>
+#pragma GCC optimize ("O3")
 using namespace std;
-#define MAXN 100005
-vector<vector<int> >adj(MAXN);
-vector<int>C(MAXN);
-unordered_map<int,int>fareshi[MAXN];
-int max_freq[MAXN];
-int num_color[MAXN];
-int ris=0;
-void dfs(int nodo){
-    int ma=nodo;
-    for(int x:adj[nodo]){
-        dfs(x);
-        if(fareshi[x].size()>fareshi[ma].size())ma=x;
-    }
-    swap(fareshi[ma],fareshi[nodo]);
-    max_freq[nodo]=max_freq[ma];
-    num_color[nodo]=num_color[ma];
-    for(int x:adj[nodo]){
-        if(x==ma)continue;
-        for(auto k:fareshi[x]){
-            fareshi[nodo][k.first]+=k.second;
-            if(fareshi[nodo][k.first]>max_freq[nodo]){
-                max_freq[nodo]=fareshi[nodo][k.first];
-                num_color[nodo]=1;
-            }else if(fareshi[nodo][k.first]==max_freq[nodo]){
-                num_color[nodo]++;
-            }
-        }
-    }
-    fareshi[nodo][C[nodo]]++;
-    if(fareshi[nodo][C[nodo]]>max_freq[nodo]){
-        max_freq[nodo]=fareshi[nodo][C[nodo]];
-        num_color[nodo]=1;
-    }else if(fareshi[nodo][C[nodo]]==max_freq[nodo]){
-        num_color[nodo]++;
-    }
-    //cout<<nodo<<" "<<max_freq[nodo]<<" "<<num_color[nodo]<<endl;
-    ris=max(ris,num_color[nodo]);
+using ll = long long;
 
+int n;
+vector<int> c;
+vector<int> p;
+vector<vector<int>> adj;
 
+struct emap {
+  int mx = 0;
+  int cnt = 0;
+  unordered_map<int, int> fc;
+  int size() { return fc.size(); }
+  void add(int x, int mult = 1) {
+    int prv = fc[x];
+    fc[x] = prv + mult;
+    if (prv + mult > mx) {
+      mx = prv + mult;
+      cnt = 1;
+    } else if (prv + mult == mx) {
+      ++cnt;
+    }
+  }
+  int getans() { return cnt; }
+};
+
+int ANS = 0;
+
+emap dfs(int v) {
+  emap ans;
+  ans.add(c[v]);
+  for (int u : adj[v]) {
+    emap tmp = dfs(u);
+    if (tmp.size() > ans.size())
+      swap(ans, tmp);
+    for (const auto& pp : tmp.fc) {
+      ans.add(pp.first, pp.second);
+    }
+  }
+  ANS = max(ANS, ans.getans());
+
+  return ans;
 }
-int main(){
-    int n;
-    cin>>n;
-    for(int i=0;i<n;i++)cin>>C[i];
-    for(int i=1;i<n;i++){
-        int tmp;
-        cin>>tmp;
-        adj[tmp].push_back(i);
-    }
 
-    dfs(0);
-    cout<<ris<<endl;
+int main() {
 
+  ifstream in("input.txt");
+  ofstream out("output.txt");
+
+  in >> n;
+  c.resize(n);
+  p.resize(n);
+  adj.resize(n);
+  for (int i = 0; i < n; ++i) {
+    in >> c[i];
+  }
+  p[0] = -1;
+  for (int i = 1; i < n; ++i) {
+    in >> p[i];
+    adj[p[i]].push_back(i);
+  }
+  dfs(0);
+  out << ANS << "\n";
 }
